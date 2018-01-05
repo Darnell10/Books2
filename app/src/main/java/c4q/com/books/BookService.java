@@ -13,3 +13,5 @@ public interface BookService {
     @GET("tamingtext/book/master/apache-solr/example/exampledocs/books.json")
     Call<List<BooksModel>> getBook();
 }
+
+//https://raw.githubusercontent.com/tamingtext/book/master/apache-solr/example/exampledocs/books.json

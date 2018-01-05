@@ -46,9 +46,12 @@ public class BookHolder extends RecyclerView.ViewHolder {
         author.setText(model.getAuthor());
         series.setText(model.getSeries());
         genre.setText(model.getGenre());
-        inStock.setText(model.getPages());
-        price.setText((int) model.getPrice());
-        pages.setText(model.getPages());
+        //- Only cast between related types, not to convert values
+        //- You can only put Strings in Textviews
+        //used .toString() method to convert boolean, double, and its
+        inStock.setText(model.getInStock().toString());
+        price.setText(Double.toString(model.getPrice()));
+        pages.setText(Integer.toString(model.getPages()));
     }
 }
 

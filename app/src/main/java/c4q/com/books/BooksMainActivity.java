@@ -31,8 +31,7 @@ public class BooksMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_books_main);
 
 
-        RecyclerView bookRecyclerView = (RecyclerView) findViewById(R.id.books_recyclerview);
-
+        //Retrofit set up
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://raw.githubusercontent.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -40,23 +39,33 @@ public class BooksMainActivity extends AppCompatActivity {
         BookService bookService = retrofit.create(BookService.class);
 
 
+        //Call using the BookService class
+        //On response lets the app know to post recyclerview
         Call<List<BooksModel>> book = bookService.getBook();
         book.enqueue(new Callback<List<BooksModel>>() {
             @Override
             public void onResponse(Call<List<BooksModel>> call, Response<List<BooksModel>> response) {
                 books=response.body();
+                // Have the recycler view setup here so that the on response can get it
+                //Only paint dynamic views when we have the data ready to populate them
+                // (i.e, a Retrofit body loaded as a list for a RecyclerView Adapter)
+                RecyclerView bookRecyclerView = (RecyclerView) findViewById(R.id.books_recyclerview);
+                BookAdapter bookAdapter = new BookAdapter(books);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                bookRecyclerView.setAdapter(bookAdapter);
+                bookRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+
             }
 
+            //tells app trow anything not responded to.
             @Override
             public void onFailure(Call<List<BooksModel>> call, Throwable t) {
 
             }
         });
 
-        BookAdapter bookAdapter = new BookAdapter(books);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        bookRecyclerView.setAdapter(bookAdapter);
-        bookRecyclerView.setLayoutManager(linearLayoutManager);
 
     }
 }
